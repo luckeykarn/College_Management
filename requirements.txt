@@ -1,0 +1,29 @@
+mysqlclient==2.2.7
+Django==5.0.14
+django-debug-toolbar
+pip install faker
+pip install djangorestframework==3.16.0
+pip install djangorestframework-simplejwt==5.5.0
+pip install django-filter
+pip install drf-yasg==1.21.10
+django-redis==5.4.0
+drfapigenerator==4.5.0
+
+
+# POSTMAN SCRIPTS for automatic token
+var res = JSON.parse(responseBody);
+
+pm.collectionVariables.set("access", res.access.toString());
+
+ADMIN LOGIN:
+username:luckeykashyap
+password:luckeykashyap
+
+HR LOGIN:
+username:nicky18
+password:password123
+
+EMPLOYEE LOGIN:
+username:aditikarn123
+password:password123
+

@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | EduHR Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 50%, #3b82f6 100%);
+        }
+        .gradient-text {
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            background-image: linear-gradient(90deg, #1e40af, #3b82f6);
+        }
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+        .card-hover:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .input-focus:focus {
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased bg-gray-50">
+    <!-- Main Content -->
+    <div class="min-h-screen flex flex-col lg:flex-row">
+        <!-- Left Side - Branding and Info -->
+        <div class="gradient-bg lg:w-1/2 p-12 text-white flex flex-col justify-between">
+            <div>
+                <div class="flex items-center mb-8">
+                    <i class="fas fa-graduation-cap text-white text-3xl mr-3"></i>
+                    <span class="text-2xl font-bold">EduHR <span class="font-light">Pro</span></span>
+                </div>
+                
+                <div class="mt-16">
+                    <h1 class="text-4xl font-bold mb-4">Welcome Back</h1>
+                    <p class="text-xl opacity-90">Sign in to access your college's HR management system</p>
+                </div>
+            </div>
+            
+            <div class="hidden lg:block">
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-6 max-w-md">
+                    <div class="flex items-start">
+                        <div class="flex-shrink-0 mt-1">
+                            <i class="fas fa-quote-left text-white opacity-70 text-xl"></i>
+                        </div>
+                        <div class="ml-4">
+                            <p class="text-white opacity-90 italic">
+                                "EduHR Pro has revolutionized how we manage our faculty. The intuitive interface and academic-specific features save us countless hours each semester."
+                            </p>
+                            <p class="mt-3 text-white font-medium">
+                                — Dr. Sarah Johnson, Dean of Faculty
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Right Side - Login Form -->
+        <div class="lg:w-1/2 p-8 lg:p-12 flex items-center justify-center">
+            <div class="w-full max-w-md">
+                <div class="text-center lg:hidden mb-8">
+                    <div class="flex items-center justify-center">
+                        <i class="fas fa-graduation-cap text-blue-800 text-3xl mr-3"></i>
+                        <span class="text-2xl font-bold gradient-text">EduHR Pro</span>
+                    </div>
+                </div>
+                
+                <div class="bg-white rounded-xl shadow-sm p-8 card-hover">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-1">Sign in to your account</h2>
+                    <p class="text-gray-600 mb-6">Enter your credentials to access the dashboard</p>
+                    
+                    <form class="space-y-6">
+                        <div>
+                            <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Institutional Email</label>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-envelope text-gray-400"></i>
+                                </div>
+                                <input id="email" name="email" type="email" autocomplete="email" required 
+                                    class="input-focus pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none transition duration-150"
+                                    placeholder="you@yourinstitution.edu">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <div class="flex justify-between items-center mb-1">
+                                <label for="password" class="block text-sm font-medium text-gray-700">Password</label>
+                                <a href="#" class="text-sm font-medium text-blue-600 hover:text-blue-500 transition duration-150">Forgot password?</a>
+                            </div>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                                    <i class="fas fa-lock text-gray-400"></i>
+                                </div>
+                                <input id="password" name="password" type="password" autocomplete="current-password" required 
+                                    class="input-focus pl-10 block w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none transition duration-150"
+                                    placeholder="••••••••">
+                            </div>
+                        </div>
+                        
+                        <div class="flex items-center">
+                            <input id="remember-me" name="remember-me" type="checkbox" 
+                                class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+                            <label for="remember-me" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                        </div>
+                        
+                        <div>
+                            <button type="submit" 
+                                class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150 transform hover:scale-[1.02]">
+                                Sign in
+                                <i class="fas fa-arrow-right ml-2"></i>
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="mt-6">
+                        <div class="relative">
+                            <div class="absolute inset-0 flex items-center">
+                                <div class="w-full border-t border-gray-300"></div>
+                            </div>
+                            <div class="relative flex justify-center text-sm">
+                                <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-6 grid grid-cols-2 gap-3">
+                            <a href="#" class="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150">
+                                <i class="fab fa-google text-red-500 mr-2"></i>
+                                Google
+                            </a>
+                            <a href="#" class="w-full inline-flex justify-center items-center py-2 px-4 border border-gray-300 rounded-lg shadow-sm bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition duration-150">
+                                <i class="fab fa-microsoft text-blue-500 mr-2"></i>
+                                Microsoft
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 text-center">
+                        <p class="text-sm text-gray-600">
+                            Don't have an account?
+                            <a href="#" class="font-medium text-blue-600 hover:text-blue-500 transition duration-150">
+                                Request access
+                            </a>
+                        </p>
+                    </div>
+                </div>
+                
+                <div class="mt-8 text-center text-sm text-gray-500">
+                    <p>© 2023 EduHR Pro. All rights reserved.</p>
+                    <div class="mt-2">
+                        <a href="#" class="text-gray-500 hover:text-gray-700 transition duration-150 mx-2">Privacy</a>
+                        <a href="#" class="text-gray-500 hover:text-gray-700 transition duration-150 mx-2">Terms</a>
+                        <a href="#" class="text-gray-500 hover:text-gray-700 transition duration-150 mx-2">Contact</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
