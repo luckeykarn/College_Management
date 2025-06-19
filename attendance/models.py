@@ -15,8 +15,10 @@ class Attendance(models.Model):
     REMARKS_CHOICES = [
         ('On-Time', 'On-Time'),
         ('Late', 'Late'),
-        ('Absent', 'Absent'),
+        ('Early Leave', 'Early Leave'),
         ('Half-Day', 'Half-Day'),
+        ('Absent', 'Absent'),
+        ('N/A', 'N/A'),  # For Leave
     ]
 
     employee = models.ForeignKey(Employee, on_delete=models.CASCADE, related_name='attendances')
@@ -26,7 +28,7 @@ class Attendance(models.Model):
     check_in = models.TimeField(blank=True, null=True)
     check_out = models.TimeField(blank=True, null=True)
     worked_hours = models.FloatField(blank=True, null=True)  # In decimal hours (e.g., 6.25)
-    remarks = models.CharField(max_length=10, choices=REMARKS_CHOICES, blank=True, null=True)
+    remarks = models.CharField(max_length=20, choices=REMARKS_CHOICES, blank=True, null=True)
     reason = models.CharField(max_length=255, blank=True, null=True)
 
     def save(self, *args, **kwargs):

@@ -27,7 +27,7 @@ class attendanceViewsets(viewsets.ModelViewSet):
            attendance = super().get_queryset()
            return attendance
        elif user.role == "Employee":
-            return Attendance.objects.filter(id=attendance.id)
+            return Attendance.objects.filter(employee=user.employee_profile)
        else:
             return super().get_queryset().none()
 
@@ -38,10 +38,8 @@ class attendanceViewsets(viewsets.ModelViewSet):
             return AttendanceRetrieveSerializers
         else:
             if self.request.user.role == "Admin" or self.request.user.role == "Hr":
-                print("this is list action for hr and admin")
                 return AttendanceListSerializersAuthorize
             else:
-                print("this is list action for hr and admin",self.request.user.role)
                 return AttendanceListSerializers
 
     # @action(detail=False, methods=['get'], name="action_name", url_path="url_path")

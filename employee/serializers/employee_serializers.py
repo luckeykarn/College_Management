@@ -9,13 +9,6 @@ class EmployeeListSerializers(serializers.ModelSerializer):
     class Meta:
         model = Employee
         fields =  ['id','user','current_salary','hire_date']
-    
-    def to_representation(self, instance):
-        print("called expecte !!!saa")
-        attrs = super().to_representation(instance)
-        attrs['manoj_bubu'] = "luckey"
-        print(instance.__dict__," instance user")
-        return attrs
 
 
 class EmployeeRetrieveSerializers(serializers.ModelSerializer):
