@@ -38,75 +38,69 @@ class AttendanceWriteSerializers(serializers.ModelSerializer):
     class Meta:
         model = Attendance
         fields = '__all__'
-        read_only_fields = ['worked_hours', 'remarks']
-
-    #for single validation
+        read_only_fields = ['worked_hours', 'remarks', 'department']
+    # Fix here: put inside the class
     def validate_employee(self, value):
-        # Check if department with this name already exists (case-insensitive)
-        if Employee.objects.filter(employee=value).exists():
+        if Employee.objects.filter(id=value.id).exists():
             return value
         else:
-            raise serializers.ValidationError("Employee not exists.")
-        
-#    from datetime import datetime, time, timedelta
-# Multiple validation of attributes
-def validate(self, attrs):
-    attrs = super().validate(attrs)
+            raise serializers.ValidationError("Employee does not exist.")
 
-    status = attrs.get('status')
-    check_in = attrs.get('check_in')
-    check_out = attrs.get('check_out')
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
 
-    # Standard office times
-    standard_start = time(9, 0)   # 9:00 AM
-    standard_end = time(17, 0)    # 5:00 PM
+        status = attrs.get('status')
+        check_in = attrs.get('check_in')
+        check_out = attrs.get('check_out')
 
-    # Attendance date
-    attendance_date = (
-        attrs.get('date') or
-        getattr(self.instance, 'date', None) or
-        datetime.today().date()
-    )
+        # Standard office times
+        standard_start = time(9, 0)
+        standard_end = time(17, 0)
 
-    # Default remarks
-    remarks = None
+        # Attendance date
+        attendance_date = (
+            attrs.get('date') or
+            getattr(self.instance, 'date', None) or
+            datetime.today().date()
+        )
 
-    if status == "Absent":
-        attrs['check_in'] = None
-        attrs['check_out'] = None
-        attrs['worked_hours'] = None
-        remarks = "Absent"
+        remarks = None
 
-    elif status == "Leave":
-        attrs['check_in'] = None
-        attrs['check_out'] = None
-        attrs['worked_hours'] = None
-        remarks = "N/A"
+        if status == "Absent":
+            attrs['check_in'] = None
+            attrs['check_out'] = None
+            attrs['worked_hours'] = None
+            remarks = "Absent"
 
-    else:
-        if not check_in or not check_out:
-            raise serializers.ValidationError("Check-in and Check-out are required for Present or Half-Day.")
+        elif status == "Leave":
+            attrs['check_in'] = None
+            attrs['check_out'] = None
+            attrs['worked_hours'] = None
+            remarks = "N/A"
 
-        start = datetime.combine(attendance_date, check_in)
-        end = datetime.combine(attendance_date, check_out)
-
-        if end <= start:
-            raise serializers.ValidationError("Check-out time must be after Check-in time.")
-
-        # Calculate worked hours
-        delta = end - start
-        worked_hours = round(delta.total_seconds() / 3600, 2)
-        attrs['worked_hours'] = worked_hours
-
-        # Auto remarks logic
-        if worked_hours < 4:
-            remarks = "Half-Day"
-        elif check_in > standard_start:
-            remarks = "Late"
-        elif check_out < standard_end:
-            remarks = "Early Leave"
         else:
-            remarks = "On-Time"
+            if not check_in or not check_out:
+                raise serializers.ValidationError("Check-in and Check-out are required for Present or Half-Day.")
 
-    attrs['remarks'] = remarks
-    return attrs
+            start = datetime.combine(attendance_date, check_in)
+            end = datetime.combine(attendance_date, check_out)
+
+            if end <= start:
+                raise serializers.ValidationError("Check-out time must be after Check-in time.")
+
+            delta = end - start
+            worked_hours = round(delta.total_seconds() / 3600, 2)
+            attrs['worked_hours'] = worked_hours
+
+            # Auto remarks logic
+            if worked_hours < 4:
+                remarks = "Half-Day"
+            elif check_in > standard_start:
+                remarks = "Late"
+            elif check_out < standard_end:
+                remarks = "Early Leave"
+            else:
+                remarks = "On-Time"
+
+        attrs['remarks'] = remarks
+        return attrs

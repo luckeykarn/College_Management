@@ -8,6 +8,8 @@ class Employee(models.Model):
     department = models.ForeignKey(Department,related_name='employees', null=True, on_delete=models.SET_NULL)
     current_salary = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     hire_date = models.DateField(null=True, blank=True)
+    welcome_email_sent = models.BooleanField(default=False)
+
 
     created_at = models.DateTimeField(auto_now_add=True)  # set only on create
     updated_at = models.DateTimeField(auto_now=True)      # set on each update

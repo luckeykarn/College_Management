@@ -46,5 +46,5 @@ class attendanceViewsets(viewsets.ModelViewSet):
     # def action_name(self, request, *args, **kwargs):
     #     return super().list(request, *args, **kwargs)
 
-    def list(self, request, *args, **kwargs):
-        return super().list(request, *args, **kwargs)
+    # def list(self, request, *args, **kwargs):
+    #     return super().list(request, *args, **kwargs)

@@ -8,6 +8,8 @@ pip install django-filter
 pip install drf-yasg==1.21.10
 django-redis==5.4.0
 drfapigenerator==4.5.0
+install celery
+pip install celery==5.3.6
 
 
 # POSTMAN SCRIPTS for automatic token

@@ -64,6 +64,8 @@ class CustomUserWriteSerializers(serializers.ModelSerializer):
         model = CustomUser
         fields = '__all__'
 
+from accounts.task import send_welcome_email
+
 class CustomTokenObtainPairSerializerAdmin(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
@@ -71,6 +73,7 @@ class CustomTokenObtainPairSerializerAdmin(TokenObtainPairSerializer):
         # You can add extra custom claims here if you want
         token['username'] = user.username
         token['email'] = user.email
+
         return token
 
     def validate(self, attrs):
@@ -135,17 +138,31 @@ class CustomTokenObtainPairSerializerEmployee(TokenObtainPairSerializer):
             'username': self.user.username,
             'email': self.user.email,
             'role':self.user.role,
-            # Add more fields if needed
-            # 'role': self.user.role,  # if using custom user model with role
+            
         }
         return data
+    
 
-class UserCreateSerializer(serializers.Serializer):
+#Without celery
+# from django.core.mail import send_mail
+# from django.conf import settings
+
+# def send_welcome_email_custom_function(user_email):
+#     subject = "Welcome to Our Platform!"
+#     message = "Hi there! \n\nWelcome to our platform. We're excited to have you onboard!"
+#     from_email = settings.DEFAULT_FROM_EMAIL
+#     recipient_list = [user_email]
+
+#     send_mail(subject, message, from_email, recipient_list, fail_silently=False)
+
+
+class UserCreateSerializerAdmin(serializers.Serializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
     gender = serializers.CharField()
+    role = serializers.CharField()
 
 
     def create(self, validated_data):
@@ -155,13 +172,52 @@ class UserCreateSerializer(serializers.Serializer):
             last_name=validated_data["last_name"],
             email=validated_data["email"],
             gender=validated_data["gender"],
+            role = validated_data["role"],
+        )
+        user.set_password(validated_data["password"])  # important: hash password!
+        user.save()
+        
+        try:
+            # Pass explicit arguments (not whole user object)
+            
+            send_welcome_email.delay(user_email=user.email) #with celery
+            # send_welcome_email_custom_function(user_email=user.email) #Without celery
+            print("Email task queued successfully!")  
+        except Exception as e:
+            print(f"Failed to queue email: {str(e)}")  
+  
+        return user
+
+class UserCreateSerializer(serializers.Serializer):
+    first_name = serializers.CharField()
+    last_name = serializers.CharField()
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+    gender = serializers.CharField()
+    
+
+    def create(self, validated_data):
+        user = CustomUser.objects.create(
+            username=validated_data["email"],
+            first_name=validated_data["first_name"],
+            last_name=validated_data["last_name"],
+            email=validated_data["email"],
+            gender=validated_data["gender"],
+           
         )
         user.set_password(validated_data["password"])  # important: hash password!
         user.save()
 
+        try:
+            # Pass explicit arguments (not whole user object)
+            
+            send_welcome_email.delay(user_email=user.email) #with celery
+            # send_welcome_email_custom_function(user_email=user.email) #Without celery
+            print("Email task queued successfully!")  
+        except Exception as e:
+            print(f"Failed to queue email: {str(e)}")  
   
         return user
-
 
 # from rest_framework.response import Response
 # from rest_framework import status

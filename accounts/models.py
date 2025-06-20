@@ -21,6 +21,8 @@ class CustomUser(AbstractUser):
         ('others', 'Others'),
     )
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
+    welcome_email_sent = models.BooleanField(default=False)
+
 
     # @property
     # def name(self):

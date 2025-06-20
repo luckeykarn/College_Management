@@ -2,7 +2,7 @@ from rest_framework import viewsets
 from rest_framework.filters import SearchFilter, OrderingFilter
 from django_filters.rest_framework import DjangoFilterBackend
 from ..models import CustomUser
-from ..serializers.customuser_serializers import CustomUserListSerializers, CustomUserRetrieveSerializers, CustomUserWriteSerializers,UserCreateSerializer
+from ..serializers.customuser_serializers import UserCreateSerializerAdmin,CustomUserListSerializers, CustomUserRetrieveSerializers, CustomUserWriteSerializers,UserCreateSerializer
 from ..utilities.importbase import *
 from rest_framework_simplejwt.tokens import RefreshToken
 # For caching import start
@@ -21,7 +21,8 @@ from django.core.cache import cache
 # For caching import end
 
 
-
+from accounts.task import send_welcome_email
+from django.http import JsonResponse
 
 class customuserViewsets(viewsets.ModelViewSet):
     serializer_class = CustomUserListSerializers
@@ -50,13 +51,17 @@ class customuserViewsets(viewsets.ModelViewSet):
 
     def get_serializer_class(self):
         if self.action in ['create', 'update', 'partial_update']:
-            return CustomUserWriteSerializers
+            if self.request.user.role == "Admin":
+                print("ehjgdhjegdhejgjheg")
+                return UserCreateSerializerAdmin
+            else:
+                return UserCreateSerializer
         elif self.action == 'retrieve':
             return CustomUserRetrieveSerializers
         return CustomUserListSerializers
     
     
-    # def list(self, request, *args, **kwargs):
+    # def list(self, request, *args, **kwargs):#without caching
     #     queryset = self.filter_queryset(self.get_queryset())
     #     serializer = self.get_serializer(queryset, many=True)
 
@@ -96,7 +101,19 @@ class customuserViewsets(viewsets.ModelViewSet):
 
         # Return the fresh data/reponse
         return Response(response_data, status=status.HTTP_200_OK)
+    
 
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        instance = serializer.save()
+        data = serializer.data  # serialized data after saving
+
+        return Response({
+            "message": "User created successfully.",
+            "data": data
+        }, status=status.HTTP_201_CREATED)
+    
 
 class CreateUserAPIView(CreateAPIView):
     queryset = CustomUser.objects.all()
@@ -108,6 +125,8 @@ class CreateUserAPIView(CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         self.perform_create(serializer)
+
+
         return Response({
             "message": "User created successfullys.",
             "data": serializer.data

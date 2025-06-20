@@ -52,6 +52,7 @@ INSTALLED_APPS = [
     'django_filters',
     'drf_yasg',
     "drfapigenerator",
+    'django_celery_results',
 
 ]
 
@@ -175,7 +176,7 @@ SIMPLE_JWT = {
     # "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=265),
 
-        # ✅ Add these two lines here:
+        # Add these two lines here:
     "ROTATE_REFRESH_TOKENS": False,
     "BLACKLIST_AFTER_ROTATION": False,
     
@@ -222,3 +223,20 @@ CACHES = {
 #     }
 # }
 
+# Redis as broker
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'django-db'
+CELERY_ACCEPT_CONTENT = ['json']
+CELERY_TASK_SERIALIZER = 'json'
+
+
+# Email configuration
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'luckeykarn0327@gmail.com'  # Your email address
+EMAIL_HOST_PASSWORD = 'kedu juqx qrrs mzkb'  # Use app password for Gmail
+
+# Password reset timeout (in seconds)
+PASSWORD_RESET_TIMEOUT = 86400  # 24 hours

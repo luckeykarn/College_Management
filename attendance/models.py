@@ -32,14 +32,28 @@ class Attendance(models.Model):
     reason = models.CharField(max_length=255, blank=True, null=True)
 
     def save(self, *args, **kwargs):
+    # Ensure `self.date` is set before calculating worked_hours
+        if not self.date:
+            self.date = datetime.today().date()
+
+        # Only calculate if both check_in and check_out are provided
         if self.check_in and self.check_out:
-            start = datetime.combine(self.date, self.check_in)
-            end = datetime.combine(self.date, self.check_out)
-            delta = end - start
-            self.worked_hours = round(delta.total_seconds() / 3600, 2)
+            try:
+                start = datetime.combine(self.date, self.check_in)
+                end = datetime.combine(self.date, self.check_out)
+
+                if end > start:
+                    delta = end - start
+                    self.worked_hours = round(delta.total_seconds() / 3600, 2)
+                else:
+                    self.worked_hours = None  # Avoid negative or zero durations
+            except Exception as e:
+                self.worked_hours = None  # Handle unexpected issues gracefully
         else:
             self.worked_hours = None
+
         super().save(*args, **kwargs)
+
 
     def formatted_check_in(self):
         return self.check_in.strftime('%I:%M %p') if self.check_in else "N/A"

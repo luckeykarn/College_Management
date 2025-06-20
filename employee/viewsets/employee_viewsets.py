@@ -98,7 +98,8 @@ class employeeViewsets(viewsets.ModelViewSet):
     # @action(detail=False, methods=['get'], name="action_name", url_path="url_path")
     # def action_name(self, request, *args, **kwargs):
     #     return super().list(request, *args, **kwargs)
-
+from employee.task import send_welcome_email
+from django.http import JsonResponse
 
 class CreateEmployeeAPIView(CreateAPIView):
     queryset = CustomUser.objects.all()
@@ -110,7 +111,7 @@ class CreateEmployeeAPIView(CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         created_data = serializer.save()
-
+        
         return Response({
             "message": "Employee created successfully.",
             "data": serializer.to_representation(created_data)

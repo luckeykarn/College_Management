@@ -47,10 +47,21 @@ class attendancePermission(BasePermission):
         elif view.action in ['retrieve']:
             return isOwner(request)
         elif view.action in ['create','update']:
-            return isOwner(request) #second level
-            return ObjectBOwner(request) #third level
+            if not request.user.is_authenticated:
+               return False
+            if request.user.role in ['Admin','Hr','Employee']:
+                return True
+            else:
+                return False
         elif view.action == "partial_update":
-            return view.get_object().user_id == request.user.id
+            if request.user.role in ["Admin" , "Hr","Employee"]:
+                return True
+            else:
+                return False
         elif view.action == 'destroy':
-            return isOwner(request)
+           if request.user.role == "Admin":
+                return True
+           else:
+                return False
+
 
