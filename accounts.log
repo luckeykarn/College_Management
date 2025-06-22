@@ -1,0 +1,10 @@
+2025-06-23 00:13:52 - DEBUG - customuser_serializers - 172 - Creating new user with data: {'first_name': 'Anjali', 'last_name': 'Mehta', 'email': 'luckeykarn0327@gmail.com', 'password': 'password123', 'gender': 'Female', 'role': 'Employee'}
+2025-06-23 00:14:16 - DEBUG - customuser_serializers - 172 - Creating new user with data: {'first_name': 'Anjali', 'last_name': 'Mehta', 'email': 'luckykarn99@gmail.com', 'password': 'password123', 'gender': 'Female', 'role': 'Employee'}
+2025-06-23 00:14:22 - INFO - customuser_serializers - 185 - User luckykarn99@gmail.com created successfully
+2025-06-23 00:14:22 - INFO - customuser_serializers - 189 - Welcome email task queued for luckykarn99@gmail.com
+2025-06-23 00:30:23 - DEBUG - customuser_serializers - 172 - Creating new user with data: {'first_name': 'abc', 'last_name': 'test', 'email': 'testing@gmail.com', 'password': 'password123', 'gender': 'others', 'role': 'Employee'}
+2025-06-23 00:30:29 - INFO - customuser_serializers - 185 - User testing@gmail.com created successfully
+2025-06-23 00:30:29 - INFO - customuser_serializers - 190 - Welcome email task queued for testing@gmail.com
+2025-06-23 00:38:59 - DEBUG - customuser_serializers - 172 - Creating new user with data: {'first_name': 'testuser', 'last_name': 'testing', 'email': 'testing12@gmail.com', 'password': 'password123', 'gender': 'others', 'role': 'Employee'}
+2025-06-23 00:39:06 - INFO - customuser_serializers - 185 - User testing12@gmail.com created successfully
+2025-06-23 00:39:06 - INFO - customuser_serializers - 190 - Welcome email task queued for testing12@gmail.com

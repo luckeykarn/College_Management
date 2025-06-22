@@ -10,6 +10,7 @@ django-redis==5.4.0
 drfapigenerator==4.5.0
 install celery
 pip install celery==5.3.6
+install colorlog- #for logging
 
 
 # POSTMAN SCRIPTS for automatic token

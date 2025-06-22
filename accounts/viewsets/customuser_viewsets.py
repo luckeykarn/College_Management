@@ -52,7 +52,7 @@ class customuserViewsets(viewsets.ModelViewSet):
     def get_serializer_class(self):
         if self.action in ['create', 'update', 'partial_update']:
             if self.request.user.role == "Admin":
-                print("ehjgdhjegdhejgjheg")
+                # print("ehjgdhjegdhejgjheg")
                 return UserCreateSerializerAdmin
             else:
                 return UserCreateSerializer

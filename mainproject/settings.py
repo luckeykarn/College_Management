@@ -240,3 +240,112 @@ EMAIL_HOST_PASSWORD = 'kedu juqx qrrs mzkb'  # Use app password for Gmail
 
 # Password reset timeout (in seconds)
 PASSWORD_RESET_TIMEOUT = 86400  # 24 hours
+
+
+import os
+from pathlib import Path
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+
+    'formatters': {
+        'standard': {
+            'format': "%(asctime)s - %(levelname)s - %(module)s - %(lineno)d - %(message)s",
+            'datefmt': "%Y-%m-%d %H:%M:%S",
+        },
+        'color': {
+            '()': 'colorlog.ColoredFormatter',
+            'format': '%(log_color)s%(asctime)s - %(levelname)s - %(name)s - %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S',
+            'log_colors': {
+                'DEBUG':    'cyan',
+                'INFO':     'green',
+                'WARNING':  'yellow',
+                'ERROR':    'red',
+                'CRITICAL': 'bold_red',
+            },
+        },
+    },
+
+    'handlers': {
+        'accounts_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'accounts.log'),
+            'formatter': 'standard',
+        },
+        'employee_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'employee.log'),
+            'formatter': 'standard',
+        },
+        'department_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'department.log'),
+            'formatter': 'standard',
+        },
+        'attendance_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'attendance.log'),
+            'formatter': 'standard',
+        },
+        'leave_request_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'leave_request.log'),
+            'formatter': 'standard',
+        },
+        'salaries_file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, 'salaries.log'),
+            'formatter': 'standard',
+        },
+
+        # ✅ FIXED: Use only one formatter key
+        'console': {
+            'level': 'DEBUG',
+            'class': 'logging.StreamHandler',
+            'formatter': 'color',  # Color output for terminal
+        },
+    },
+
+    'loggers': {
+        'accounts': {
+            'handlers': ['accounts_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'employee': {
+            'handlers': ['employee_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'department': {
+            'handlers': ['department_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'attendance': {
+            'handlers': ['attendance_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'leave_request': {
+            'handlers': ['leave_request_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+        'salaries': {
+            'handlers': ['salaries_file', 'console'],
+            'level': 'DEBUG',
+            'propagate': False,
+        },
+    }
+}

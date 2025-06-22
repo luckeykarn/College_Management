@@ -9,6 +9,7 @@ from rest_framework_simplejwt.serializers import TokenRefreshSerializer
 from rest_framework_simplejwt.tokens import AccessToken
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.exceptions import ValidationError
+import logging
 
 
 
@@ -156,6 +157,8 @@ class CustomTokenObtainPairSerializerEmployee(TokenObtainPairSerializer):
 #     send_mail(subject, message, from_email, recipient_list, fail_silently=False)
 
 
+logger = logging.getLogger('accounts')  # This uses the 'accounts' logger from settings.py
+
 class UserCreateSerializerAdmin(serializers.Serializer):
     first_name = serializers.CharField()
     last_name = serializers.CharField()
@@ -166,27 +169,32 @@ class UserCreateSerializerAdmin(serializers.Serializer):
 
 
     def create(self, validated_data):
-        user = CustomUser.objects.create(
-            username=validated_data["email"],
-            first_name=validated_data["first_name"],
-            last_name=validated_data["last_name"],
-            email=validated_data["email"],
-            gender=validated_data["gender"],
-            role = validated_data["role"],
-        )
-        user.set_password(validated_data["password"])  # important: hash password!
-        user.save()
-        
+        logger.debug("Creating new user with data: %s", validated_data)  # Debugging input
         try:
-            # Pass explicit arguments (not whole user object)
-            
-            send_welcome_email.delay(user_email=user.email) #with celery
-            # send_welcome_email_custom_function(user_email=user.email) #Without celery
-            print("Email task queued successfully!")  
+            user = CustomUser.objects.create(
+                username=validated_data["email"],
+                first_name=validated_data["first_name"],
+                last_name=validated_data["last_name"],
+                email=validated_data["email"],
+                gender=validated_data["gender"],
+                role=validated_data["role"],
+            )
+            user.set_password(validated_data["password"])  # Hash password
+            user.save()
         except Exception as e:
-            print(f"Failed to queue email: {str(e)}")  
-  
+            logger.error(f"Errors Dduring Creating User and error is,{e}")
+
+        logger.info(f"User {user.email} created successfully")  # Info log
+
+
+        try:
+            send_welcome_email.delay(user_email=user.email)  # Celery task
+            logger.info(f"Welcome email task queued for {user.email}")
+        except Exception as e:
+            logger.error(f"Failed to queue welcome email for {user.email} - Error: {str(e)}")
+
         return user
+    
 
 class UserCreateSerializer(serializers.Serializer):
     first_name = serializers.CharField()
@@ -197,26 +205,26 @@ class UserCreateSerializer(serializers.Serializer):
     
 
     def create(self, validated_data):
+        logger.debug("Creating regular user with data: %s", validated_data)
+
         user = CustomUser.objects.create(
             username=validated_data["email"],
             first_name=validated_data["first_name"],
             last_name=validated_data["last_name"],
             email=validated_data["email"],
             gender=validated_data["gender"],
-           
         )
-        user.set_password(validated_data["password"])  # important: hash password!
+        user.set_password(validated_data["password"])
         user.save()
 
+        logger.info(f"User {user.email} created successfully")
+
         try:
-            # Pass explicit arguments (not whole user object)
-            
-            send_welcome_email.delay(user_email=user.email) #with celery
-            # send_welcome_email_custom_function(user_email=user.email) #Without celery
-            print("Email task queued successfully!")  
+            send_welcome_email.delay(user_email=user.email)
+            logger.info(f"Welcome email task queued for {user.email}")
         except Exception as e:
-            print(f"Failed to queue email: {str(e)}")  
-  
+            logger.error(f"Failed to queue welcome email for {user.email} - Error: {str(e)}")
+
         return user
 
 # from rest_framework.response import Response
